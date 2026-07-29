@@ -111,6 +111,9 @@ class SphinxDocsSearchAPI(
         return SearchQuery(query, terms, excluded, objs)
     }
 
+    /**
+     * Based on the JS implementation from Sphinx, licensed BSD-2-Clause
+     */
     private suspend fun performSearch(query: SearchQuery, lang: LanguageData): List<OpenSearchSuggestion> {
         logger.info("performSearch: $query")
         val data = searchData.get()
