@@ -18,3 +18,10 @@ The format is always `https://{host}/{endpoint}/[search,suggest]?q={searchQuery}
 | `/exposed`   | https://jetbrains.com/help/exposed/               | Exposed documentation. Searches both api and guides.                                                                  |
 | `/ktor`      | https://ktor.io/docs/welcome.html                 | Ktor documentation. Searches both api and guides.                                                                     |
 | `/composemp` | https://kotlinlang.org/api/compose-multiplatform/ | Compose Multiplatform documentation. Only provides suggestions, and search matches link to the exact page if present. |
+
+### Contributing
+
+Feel free to open PRs for additional sites! Though there are some requirements for this:
+
+- Use API endpoints for suggestions, no scraping HTML.
+- Do not include sites that require flaresolverr or similar services; It must be directly accessible.

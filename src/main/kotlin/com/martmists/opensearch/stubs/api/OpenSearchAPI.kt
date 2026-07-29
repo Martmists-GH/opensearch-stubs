@@ -14,8 +14,6 @@ data class OpenSearchDescription(
     val longName: String? = null,
     val tags: List<String> = emptyList(),
 ) {
-
-
     data class Image private constructor(
         val size: Int,
         val url: String,
@@ -36,44 +34,26 @@ data class OpenSearchSuggestion(
 )
 
 interface OpenSearchAPI {
+    /**
+     * The route at which this endpoint is hosted.
+     */
     val path: String
 
+    /**
+     * Return a list of suggestions for the given query.
+     */
     suspend fun suggest(query: String): List<OpenSearchSuggestion>
+
+    /**
+     * Provide the matching page URL for the given query if possible.
+     * Else, provide the search page with the query string applied.
+     */
     suspend fun search(query: String): String
 
+    /**
+     * The description of the OpenSearch endpoint. Used for XML generation only.
+     */
     val details: OpenSearchDescription
-    val description: String
-        get() {
-            val details = this.details
-            val tagString = details.tags.joinToString(" ")
-
-            require(details.shortName.length in 1..16)
-            require(details.description.length in 1..16)
-            require(tagString.length in 0..256)
-            require((details.longName?.length ?: 1) in 1..256)
-
-            return buildString {
-                appendLine("<?xml version=\"1.0\"?>")
-                appendLine("<OpenSearchDescription xmlns=\"http://a9.com/-/spec/opensearch/1.1/\" xmlns:moz=\"https://www.mozilla.org/2006/browser/search/\">")
-                appendLine("  <ShortName>${details.shortName}</ShortName>")
-                appendLine("  <Description>${details.description}</Description>")
-                if (details.tags.isNotEmpty()) {
-                    appendLine("  <Tags>$tagString</Tags>")
-                }
-                appendLine("  <Contact>mail@martmists.com</Contact>")
-                appendLine("  <Url type=\"text/html\" rel=\"results\" template=\"https://opensearch.martmists.com/${path}/search?q={searchTerms}\" />")
-                appendLine("  <Url type=\"application/x-suggestions+json\" rel=\"suggestions\" template=\"https://opensearch.martmists.com/${path}/suggest?q={searchTerms}\" />")
-                if (details.longName != null) {
-                    appendLine("  <LongName>${details.longName}</LongName>")
-                }
-                for (image in details.images) {
-                    appendLine("  <Image width=\"${image.size}\" height=\"${image.size}\" type=\"${image.mimeType}\">${image.url}</Image>")
-                }
-                appendLine("  <Developer>Martmists</Developer>")
-                appendLine("  <SyndicationRight>limited</SyndicationRight>")
-                appendLine("</OpenSearchDescription>")
-            }
-        }
 
     val client: HttpClient
         get() = OpenSearchAPI.client
