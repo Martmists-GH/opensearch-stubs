@@ -115,7 +115,6 @@ class SphinxDocsSearchAPI(
      * Based on the JS implementation from Sphinx, licensed BSD-2-Clause
      */
     private suspend fun performSearch(query: SearchQuery, lang: LanguageData): List<OpenSearchSuggestion> {
-        logger.info("performSearch: $query")
         val data = searchData.get()
 
         val queryLower = query.query.lowercase()
@@ -150,8 +149,6 @@ class SphinxDocsSearchAPI(
             }
         }
 
-        logger.info("Results so far: $normalResults")
-
         for (obj in query.objectTerms) {
             normalResults.addAll(objectSearch(obj, query.objectTerms, lang))
         }
@@ -168,7 +165,6 @@ class SphinxDocsSearchAPI(
 
         val seen = mutableSetOf<OpenSearchSuggestion>()
         return results.asReversed().fold(mutableListOf()) { acc, (result, score) ->
-            logger.info("${result.suggestion} => $score")
             if (result !in seen) {
                 acc.add(result)
                 seen.add(result)
@@ -215,9 +211,7 @@ class SphinxDocsSearchAPI(
                 }
 
                 val objName = data.objNames[match[1].int.toString()]!![2]
-                logger.info(match.toString())
                 val title = data.titles[match[0].int]
-                logger.info(title)
 
                 val otherTerms = objectTerms - obj
                 if (otherTerms.isNotEmpty()) {
