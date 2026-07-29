@@ -2,7 +2,9 @@
 
 I like having opensearch endpoints for easy search, so I made a few for sites that didn't have any decent search/suggest endpoints.
 A public version is available at https://opensearch.martmists.com but I'd recommend self-hosting because if it gets marked as spam it might get blocked.
+
 The format is always `https://{host}/{endpoint}/[search,suggest]?q={searchQuery}&lang={languageCode}`. The `lang` parameter is optional and defaults to `en`. Valid values for this depend on the search provider. 
+
 XML description files are also provided. For an up-to-date list, simply query the main page.
 
 ### Supported sites
