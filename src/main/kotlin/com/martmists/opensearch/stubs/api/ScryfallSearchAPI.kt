@@ -38,12 +38,12 @@ object ScryfallSearchAPI : OpenSearchAPI {
         }
     }
 
-    override suspend fun suggest(query: String): List<OpenSearchSuggestion> {
-        return ratelimiter.search(query)
+    override suspend fun suggest(query: String, language: String): List<OpenSearchSuggestion> {
+        return ratelimiter.search("$query lang:$language")
     }
 
-    override suspend fun search(query: String): String {
-        return "https://scryfall.com/search?q=" + query.encodeURLParameter()
+    override suspend fun search(query: String, language: String): String {
+        return "https://scryfall.com/search?q=" + ("$query lang:$language").encodeURLParameter()
     }
 
     override val details = OpenSearchDescription(

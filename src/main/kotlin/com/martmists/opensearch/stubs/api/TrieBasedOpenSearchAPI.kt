@@ -1,33 +1,27 @@
 package com.martmists.opensearch.stubs.api
 
 import com.martmists.opensearch.stubs.util.AdaptiveTrie
+import com.martmists.opensearch.stubs.util.suspendLazy
 import io.ktor.http.encodeURLParameter
-import kotlinx.atomicfu.atomic
 import kotlinx.coroutines.flow.Flow
 
 abstract class TrieBasedOpenSearchAPI(private val searchUrl: String) : OpenSearchAPI {
     abstract fun collectSearchData(): Flow<OpenSearchSuggestion>
 
-    private val searchData = AdaptiveTrie<OpenSearchSuggestion>(4)
-    private val hasSearchData = atomic(false)
-
-    private suspend fun tryCollectSearchData() {
-        if (hasSearchData.compareAndSet(expect = false, update = true)) {
-            collectSearchData().collect {
-                searchData.insert(it.suggestion, it)
-            }
+    private val searchData = suspendLazy {
+        val out = AdaptiveTrie<OpenSearchSuggestion>(4)
+        collectSearchData().collect {
+            out.insert(it.suggestion, it)
         }
+        out
     }
 
-    override suspend fun suggest(query: String): List<OpenSearchSuggestion> {
-        tryCollectSearchData()
-        return searchData.searchByPrefix(query)
+    override suspend fun suggest(query: String, language: String): List<OpenSearchSuggestion> {
+        return searchData.get().searchByPrefix(query)
     }
 
-    override suspend fun search(query: String): String {
-        tryCollectSearchData()
-
-        val found = searchData.searchByPrefix(query)
+    override suspend fun search(query: String, language: String): String {
+        val found = searchData.get().searchByPrefix(query)
         if (found.size == 1) {
             return found.first().url
         }

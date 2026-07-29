@@ -5,8 +5,9 @@
         </encoder>
     </appender>
     <root level="INFO">
-        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="STDOUT" />
     </root>
-    <logger name="org.eclipse.jetty" level="INFO"/>
-    <logger name="io.netty" level="INFO"/>
+    <logger name="org.eclipse.jetty" level="INFO" />
+    <logger name="io.netty" level="INFO" />
+    <logger name="Sphinx" level="DEBUG" />
 </configuration>

@@ -20,7 +20,6 @@ import io.ktor.server.response.respond
 import io.ktor.server.response.respondRedirect
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.get
-import io.ktor.server.routing.path
 import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -49,6 +48,7 @@ fun main() {
         PokemonDBSearchAPI,
         ScryfallSearchAPI,
         SteamSearchAPI,
+        SphinxDocsSearchAPI.PYTHON,
         SphinxDocsSearchAPI.NUMPY,
         SphinxDocsSearchAPI.SCIPY,
         AlgoliaSearchAPI.KOTLIN,
@@ -79,13 +79,15 @@ fun main() {
                 route(provider.path) {
                     get("/search") {
                         val query = call.parameters["q"] ?: ""
-                        val outUrl = provider.search(query)
+                        val language = call.parameters["lang"] ?: "en"
+                        val outUrl = provider.search(query.trim(), language)
                         call.respondRedirect(outUrl)
                     }
 
                     get("/suggest") {
                         val query = call.parameters["q"] ?: return@get call.respond(emptyList<Int>())
-                        val suggestions = provider.suggest(query).take(10)
+                        val language = call.parameters["lang"] ?: "en"
+                        val suggestions = provider.suggest(query.trim(), language).take(10)
                         call.respond(buildJsonArray {
                             add(JsonPrimitive(query))
                             addJsonArray {

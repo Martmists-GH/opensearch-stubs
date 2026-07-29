@@ -10,11 +10,11 @@ import kotlin.io.encoding.Base64
 object SteamSearchAPI : OpenSearchAPI {
     override val path = "/steam"
 
-    override suspend fun suggest(query: String): List<OpenSearchSuggestion> {
+    override suspend fun suggest(query: String, language: String): List<OpenSearchSuggestion> {
         val arr = CStoreQuery_SearchSuggestions_Request.newBuilder().apply {
             setSearchTerm(query)
             contextBuilder.apply {
-                setLanguage("english")
+                setLanguage(language)
                 setCountryCode("US")
             }
             dataRequestBuilder.apply {
@@ -38,8 +38,8 @@ object SteamSearchAPI : OpenSearchAPI {
         }
     }
 
-    override suspend fun search(query: String): String {
-        val results = suggest(query)
+    override suspend fun search(query: String, language: String): String {
+        val results = suggest(query, language)
 
         if (results.size == 1) {
             return results.first().url

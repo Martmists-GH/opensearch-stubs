@@ -6,6 +6,8 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.http.ContentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 data class OpenSearchDescription(
     val shortName: String,
@@ -42,13 +44,13 @@ interface OpenSearchAPI {
     /**
      * Return a list of suggestions for the given query.
      */
-    suspend fun suggest(query: String): List<OpenSearchSuggestion>
+    suspend fun suggest(query: String, language: String = "en"): List<OpenSearchSuggestion>
 
     /**
      * Provide the matching page URL for the given query if possible.
      * Else, provide the search page with the query string applied.
      */
-    suspend fun search(query: String): String
+    suspend fun search(query: String, language: String = "en"): String
 
     /**
      * The description of the OpenSearch endpoint. Used for XML generation only.
@@ -57,6 +59,8 @@ interface OpenSearchAPI {
 
     val client: HttpClient
         get() = OpenSearchAPI.client
+    val logger: Logger
+        get() = LoggerFactory.getLogger(this::class.java)
 
     companion object {
         val client = HttpClient(CIO) {

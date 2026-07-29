@@ -2,19 +2,14 @@ package com.martmists.opensearch.stubs.api
 
 import io.ktor.client.call.body
 import io.ktor.client.request.*
-import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.http.encodeURLParameter
 import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.add
 import kotlinx.serialization.json.addAll
 import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.putJsonArray
 
@@ -68,7 +63,7 @@ class AlgoliaSearchAPI(
 
     fun fullUrl(url: String): String = if (url.startsWith("http")) url else "$baseUrl/${url.trimStart('/')}"
 
-    override suspend fun search(query: String): String {
+    override suspend fun search(query: String, language: String): String {
         val res = fetchResults(query)
 
         if (res.hits.size == 1) {
@@ -80,7 +75,7 @@ class AlgoliaSearchAPI(
         }?.url?.let(::fullUrl) ?: (searchResultsUrl + query.encodeURLParameter())
     }
 
-    override suspend fun suggest(query: String): List<OpenSearchSuggestion> {
+    override suspend fun suggest(query: String, language: String): List<OpenSearchSuggestion> {
         return fetchResults(query).hits.map {
             OpenSearchSuggestion(
                 it.pageTitle,
