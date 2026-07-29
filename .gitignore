@@ -1,0 +1,11 @@
+### IDE
+.idea/
+*.iml
+
+### Gradle
+gradle/
+.gradle/
+
+### Kotlin
+build/
+.kotlin/
