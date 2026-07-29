@@ -49,7 +49,6 @@ fun main() {
         PokemonDBSearchAPI,
         ScryfallSearchAPI,
         SteamSearchAPI,
-        SphinxDocsSearchAPI.PYTHON,
         SphinxDocsSearchAPI.NUMPY,
         SphinxDocsSearchAPI.SCIPY,
         AlgoliaSearchAPI.KOTLIN,

@@ -11,7 +11,6 @@ The format is always `https://{host}/{endpoint}/[search,suggest]?q={searchQuery}
 | `/pokemondb` | https://pokemondb.net/                            | Details on Pokemon game data. Categories are indexed on launch.                                                       |
 | `/scryfall`  | https://scryfall.com/                             | Directly invokes the Scryfall API. Respects the 2 requests/500ms ratelimit.                                           |
 | `/steam`     | https://store.steampowered.com/                   | Performs search over the Steam store.                                                                                 |
-| `/python`    | https://docs.python.org/3/                        | Python 3 documentation, defaults to latest. Indexed on launch.                                                        |
 | `/numpy`     | https://numpy.org/doc/stable/                     | Python NumPy documentation, defaults to latest. Indexed on launch.                                                    |
 | `/scipy`     | https://docs.scipy.org/doc/scipy/                 | Python SciPy documentation, defaults to latest. Indexed on launch.                                                    |
 | `/kotlin`    | https://kotlinlang.org/docs/                      | Kotlin documentation. Searches both stdlib and guides.                                                                |

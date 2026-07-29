@@ -70,17 +70,7 @@ class SphinxDocsSearchAPI(
     }
 
     companion object {
-        val PYTHON = SphinxDocsSearchAPI("/python", "https://docs.python.org/3") {
-            OpenSearchDescription(
-                "Python 3",
-                "Python 3 Documentation",
-                listOf(
-                    OpenSearchDescription.Image(16, "https://docs.python.org/3/_static/py.svg", ContentType.Image.PNG)  // NOTE: This is how python.org specifies it?
-                ),
-                tags = listOf("python", "official")
-            )
-        }
-        val NUMPY = SphinxDocsSearchAPI("/numpy", "https://numpy.org/doc/stable/") {
+        val NUMPY = SphinxDocsSearchAPI("/numpy", "https://numpy.org/doc/stable") {
             OpenSearchDescription(
                 "NumPy",
                 "NumPy Documentation",
