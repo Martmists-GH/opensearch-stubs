@@ -70,7 +70,7 @@ class AlgoliaSearchAPI(
             return fullUrl(res.hits.first().url)
         }
 
-        return res.hits.firstOrNull {
+        return res.hits.find {
             it.pageTitle == query
         }?.url?.let(::fullUrl) ?: (searchResultsUrl + query.encodeURLParameter())
     }

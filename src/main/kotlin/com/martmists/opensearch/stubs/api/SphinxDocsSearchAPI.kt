@@ -321,6 +321,11 @@ class SphinxDocsSearchAPI(
             return res.first().url
         }
 
+        val exactMatch = res.find { it.suggestion == query }
+        if (exactMatch != null) {
+            return exactMatch.url
+        }
+
         return "$baseUrl/search.html?q=" + query.encodeURLParameter()
     }
 

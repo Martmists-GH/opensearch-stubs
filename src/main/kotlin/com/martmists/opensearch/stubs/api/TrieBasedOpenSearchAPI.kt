@@ -22,8 +22,14 @@ abstract class TrieBasedOpenSearchAPI(private val searchUrl: String) : OpenSearc
 
     override suspend fun search(query: String, language: String): String {
         val found = searchData.get().searchByPrefix(query)
+
         if (found.size == 1) {
             return found.first().url
+        }
+
+        val exactMatch = found.find { it.suggestion == query }
+        if (exactMatch != null) {
+            return exactMatch.url
         }
 
         return searchUrl + query.encodeURLParameter()
